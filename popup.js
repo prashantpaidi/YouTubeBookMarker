@@ -1,12 +1,45 @@
 // adding a new bookmark row to the popup
-const addNewBookmark = () => {};
+const addNewBookmark = (bookmarks, bookmark) => {
+  const bookmarkTitleElement = document.createElement('div');
+  const controlsElement = document.createElement('div');
+  const newBookmarkElement = document.createElement('div');
 
-const viewBookmarks = () => {};
+  bookmarkTitleElement.textContent = bookmark.desc;
+  bookmarkTitleElement.className = 'bookmark-title';
+  controlsElement.className = 'bookmark-controls';
 
-const onPlay = e => {};
+  setBookmarkAttributes('play', onPlay, controlsElement);
+  setBookmarkAttributes('delete', onDelete, controlsElement);
 
-const onDelete = e => {};
+  newBookmarkElement.id = 'bookmark-' + bookmark.time;
+  newBookmarkElement.className = 'bookmark';
+  newBookmarkElement.setAttribute('timestamp', bookmark.time);
 
-const setBookmarkAttributes =  () => {};
+  newBookmarkElement.appendChild(bookmarkTitleElement);
+  newBookmarkElement.appendChild(controlsElement);
+  bookmarks.appendChild(newBookmarkElement);
+};
 
-document.addEventListener("DOMContentLoaded", () => {});
+const viewBookmarks = (currentBookmarks = []) => {
+  const bookmarksElement = document.getElementById('bookmarks');
+  bookmarksElement.innerHTML = '';
+
+  if (currentBookmarks.length > 0) {
+    for (let i = 0; i < currentBookmarks.length; i++) {
+      const bookmark = currentBookmarks[i];
+      addNewBookmark(bookmarksElement, bookmark);
+    }
+  } else {
+    bookmarksElement.innerHTML = '<i class="row">No bookmarks to show</i>';
+  }
+
+  return;
+};
+
+const onPlay = (e) => {};
+
+const onDelete = (e) => {};
+
+const setBookmarkAttributes = () => {};
+
+document.addEventListener('DOMContentLoaded', () => {});
