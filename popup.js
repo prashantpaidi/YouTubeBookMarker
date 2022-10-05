@@ -65,6 +65,34 @@ const onDelete = async (e) => {
   );
 };
 
-const setBookmarkAttributes = () => {};
+const setBookmarkAttributes = (src, eventListener, controlParentElement) => {
+  const controlElement = document.createElement('img');
 
-document.addEventListener('DOMContentLoaded', () => {});
+  controlElement.src = 'assets/' + src + '.png';
+  controlElement.title = src;
+  controlElement.addEventListener('click', eventListener);
+  controlParentElement.appendChild(controlElement);
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const activeTab = await getActiveTabURL();
+  const queryParameters = activeTab.url.split('?')[1];
+  const urlParameters = new URLSearchParams(queryParameters);
+
+  const currentVideo = urlParameters.get('v');
+
+  if (activeTab.url.includes('youtube.com/watch') && currentVideo) {
+    chrome.storage.sync.get([currentVideo], (data) => {
+      const currentVideoBookmarks = data[currentVideo]
+        ? JSON.parse(data[currentVideo])
+        : [];
+
+      viewBookmarks(currentVideoBookmarks);
+    });
+  } else {
+    const container = document.getElementsByClassName('container')[0];
+
+    container.innerHTML =
+      '<div class="title">This is not a youtube video page.</div>';
+  }
+});
